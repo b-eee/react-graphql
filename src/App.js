@@ -41,7 +41,7 @@ function GetWorkspaces() {
 
 function AddWorkspace() {
   let input;
-  const [addTodo, { data, loading, error }] = useMutation(ADD_WORKSPACE);
+  const [addWorkspace, { data, loading, error }] = useMutation(ADD_WORKSPACE);
 
   if (loading) return 'Submitting...';
   if (error) return `Submission error! ${error.message}`;
@@ -51,7 +51,7 @@ function AddWorkspace() {
       <form
         onSubmit={e => {
           e.preventDefault();
-          addTodo({ variables: { createWorkSpaceInput: {
+          addWorkspace({ variables: { createWorkSpaceInput: {
             name: input.value
           }} });
           input.value = '';
