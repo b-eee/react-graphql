@@ -36,3 +36,23 @@
     transform: rotate(360deg);
   }
 }
+
+.title-query {
+  font-weight: 24px;
+  color: black;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.title-mutation, .title-query  {
+  font-weight: 24px;
+  color: Red;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.button-mutation{
+  margin-top: 10px;
+  background-color: chocolate;
+  margin-left: 10px;
+}
