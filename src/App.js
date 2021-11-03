@@ -72,9 +72,9 @@ function AddWorkspace() {
 function App() {
   return (
     <div className="App">
-      <div>
+      <div className="container">
         <div className="title-query">Query: Get Workspaces</div>
-        <table>
+        <table className="table-content">
           <tbody>
           <tr>
             <td>index</td>
