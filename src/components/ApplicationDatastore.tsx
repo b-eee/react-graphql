@@ -98,8 +98,8 @@ const AddApplication: any = () =>{
 
 
 function ApplicationDatastore() {
-  const [workspaceId, setWorkspaceId] = React.useState('');
-  const [workspaceIdIn, setWorkspaceIdIn] = React.useState('');
+  const [workspaceId, setWorkspaceId] = React.useState<string>('');
+  const [workspaceIdIn, setWorkspaceIdIn] = React.useState<string>('');
 
   const handleClick = () => {
     setWorkspaceIdIn(workspaceId);

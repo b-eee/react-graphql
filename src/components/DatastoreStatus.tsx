@@ -2,7 +2,6 @@ import React from 'react';
 import {
   useQuery,
   gql,
-  useMutation,
 } from "@apollo/client";
 
 
@@ -23,11 +22,7 @@ query Query($datastoreId: String!) {
 }
 `;
 
-
-
 function GetStatus(props: any) {
-  console.log('props', props)
-
   const datastoreId = props.datastoreId
   const  { data, loading, error } = useQuery(GET_DATASTORESTATUS, 
     {
@@ -35,7 +30,6 @@ function GetStatus(props: any) {
     });
   if (loading) return <tr><td> Loading...</td></tr>;
   if (error) return <tr><td>Error :(</td></tr>;
-  console.log(data)
   return data.datastoreGetStatuses.map((appDs: any, index: number) => {
       return (
         <tr key={index}>

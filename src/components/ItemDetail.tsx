@@ -96,8 +96,9 @@ function ItemDetail() {
           <div>item ID:</div>
           <div className="input-field"><input onChange={(e) => setItem(e.target.value)} placeholder="item ID..." /></div>
         </div>
+          <div>datastoreItemDetailParams:https://apidoc.hexabase.com/docs/v0/items-search/GetItemDetails</div>
         <div className="body-input">
-          <div>datastoreItemDetailParams:</div>
+          <div>example type json: {JSON.stringify({"format":"map"})}</div>
           <div className="input-field type-json"><input onChange={(e) => setDatastoreItemDetailParams(e.target.value)} placeholder="datastoreItemDetailParams..." /></div>
         </div>
         <button onClick={handleClick} className="icon">
