@@ -51,6 +51,10 @@
     margin-bottom: 20px;
     margin-top: 10px;
 }
+.title-mutation{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 
 .button-mutation {
     margin-top: 10px;
@@ -61,4 +65,33 @@
 .container,
 .table-content {
     margin: 0 auto;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+#root {
+    width: 100%;
+    /* max-width: 800px; */
+}
+.tag-pre{
+    width: 100%;
+    max-width: 300px;
+    display: contents;
+}
+table, th, td{
+    border:1px solid black;
+}
+table{
+    border-collapse:collapse;
+}
+.container button {
+    margin: 0 2px;
+}
+
+.input-field{
+    display: inline-flex;
+}
+.type-json{
+    height: 65px;
 }
