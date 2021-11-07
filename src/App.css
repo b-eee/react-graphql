@@ -95,3 +95,7 @@ table{
 .type-json{
     height: 65px;
 }
+.item-body-form{
+    width: 400px;
+    margin: 0 auto;
+}

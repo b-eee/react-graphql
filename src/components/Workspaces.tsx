@@ -1,38 +1,17 @@
 import React from 'react';
 import {
   useQuery,
-  gql,
   useMutation,
 } from "@apollo/client";
 
-import { WorkSpaceModel } from '../models/workspace'
-const GET_WORKSPACE = gql`{
-workspaces {
-  current_workspace_id
-  workspaces {
-    workspace_id
-    workspace_name
-  }
-}
-}`;
-
-const ADD_WORKSPACE = gql`
-  mutation Mutation($createWorkSpaceInput: CreateWorkSpaceInput!) {
-  createWorkspace(createWorkSpaceInput: $createWorkSpaceInput) {
-    w_id
-  }
-}
-`;
-
-type WId = {
-  w_id: string
-}
+import { WorkSpaceModel, WId } from '../models/workspace'
+import {GET_WORKSPACE, ADD_WORKSPACE} from '../service-graphql/workspaces'
 
 const GetWorkspaces:  React.FC = () => {
   const { loading, error, data } = useQuery(GET_WORKSPACE);
-  console.log(loading, error, data)
+
   if (loading) return <tr><td> Loading...</td></tr>;
-  if (error) return <tr><td>Error :(</td></tr>;
+  if (error) return <tr><td>Error</td></tr>;
     return data.workspaces.workspaces.map((workspace: WorkSpaceModel, index: number) => {
       return (
         <tr key={index}>
@@ -46,10 +25,12 @@ const GetWorkspaces:  React.FC = () => {
 
 const AddWorkspace: any = () => {
   let input: HTMLInputElement|null;
+
   const [addWorkspace, { data, loading, error }] = useMutation(ADD_WORKSPACE);
 
   if (loading) return 'Submitting...';
   if (error) return `Submission error! ${error.message}`;
+
   const workspaceRes: WId = data?.createWorkspace
   return ( 
     <div>
@@ -87,9 +68,9 @@ function WorkSpaces() {
           <thead>
 
           <tr>
-            <th>index</th>
-            <th>workspace_id</th>
-            <th>workspace_name</th>
+            <th>Index</th>
+            <th>Workspace id</th>
+            <th>Workspace name</th>
           </tr>
           </thead>
           <tbody>

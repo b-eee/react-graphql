@@ -1,55 +1,42 @@
 import React from 'react';
-import {
-  useQuery,
-  gql,
-  useMutation,
-} from "@apollo/client";
+import { GET_APPLICATIONDATASTORE, ADD_APPLICATION } from '../service-graphql/application'
+import { useQuery, useMutation } from "@apollo/client";
+import {PropsGetApplication, ApplicationAndDataStore, CreateProject } from '../models/application'
+import {CreateProjectParams} from '../dto/application'
 
+function GetApplicationAndDatastore(props: PropsGetApplication): any {
 
-const GET_APPLICATIONDATASTORE = gql`
-  query Query($workspaceId: String!) {
-    getApplicationAndDataStore(workspaceId: $workspaceId) {
-      application_id
-      name
-      display_id
-      datastores {
-        name
-        datastore_id
-      }
-    }
-  }
-`;
-const ADD_APPLICATION = gql`
-mutation DatastoreGetDatastoreItemsMutation($createProjectParams: CreateProjectParams) {
-  applicationCreateProject(createProjectParams: $createProjectParams) {
-    project_id
-  }
-}
-`;
-
-function GetApplicationAndDatastore(props: any ) {
   const workspaceId = props.workspaceId
-  const  { data, loading, error } = useQuery(GET_APPLICATIONDATASTORE, 
+  const  { data, loading, error } = useQuery<{getApplicationAndDataStore: [ApplicationAndDataStore]}, {workspaceId: string}>(GET_APPLICATIONDATASTORE, 
     {
       variables: { workspaceId },
     });
+
   if (loading) return <tr><td> Loading...</td></tr>;
-  if (error) return <tr><td>Error :(</td></tr>;
-  return data.getApplicationAndDataStore.map((appDs :any, index: number) => {
+  if (error) return <tr><td>Error</td></tr>;
+  if (data){
+    return data.getApplicationAndDataStore.map((appDs: ApplicationAndDataStore, index: number) => {
       return (
         <tr key={index}>
           <td>{index}</td>
           <td>{JSON.stringify(appDs)}</td>
         </tr>
       );
-  })
-
+    })
+  } else {
+    return (
+      <tr>
+        <td></td>
+        <td>Can't load data</td>
+      </tr>
+    )
+  }
 }
 
 const AddApplication: any = () =>{
   let tp_id: HTMLInputElement|null;
   let name: HTMLInputElement|null;
-  const [addApplication, { data, loading, error }] = useMutation(ADD_APPLICATION);
+  const [addApplication, { data, loading, error }] = useMutation<{applicationCreateProject: CreateProject}, {createProjectParams: CreateProjectParams}>(ADD_APPLICATION);
 
   if (loading) return 'Submitting...';
   if (error) return `Submission error! ${error.message}`;
@@ -96,7 +83,6 @@ const AddApplication: any = () =>{
   );
 }
 
-
 function ApplicationDatastore() {
   const [workspaceId, setWorkspaceId] = React.useState<string>('');
   const [workspaceIdIn, setWorkspaceIdIn] = React.useState<string>('');
@@ -105,22 +91,21 @@ function ApplicationDatastore() {
     setWorkspaceIdIn(workspaceId);
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setWorkspaceId(event.target.value);
-  }
   return (
     <>
         <div className="title-query">Query: Get Application Datastores</div>
-        <input onChange={handleChange} placeholder="Workspace ID..." />
+        <input onChange={ (event) => setWorkspaceId(event.target.value)} placeholder="Workspace ID..." />
         <button onClick={handleClick} className="icon">
           Workspace ID
         </button>
         <table className="table-content">
-          <tbody>
-          <tr>
-            <td>index</td>
-            <td>Application and Datastore</td>
+          <thead>
+            <tr>
+              <th>Index</th>
+              <th>Application and Datastore</th>
             </tr>
+          </thead>
+          <tbody>
             {workspaceId && 
             <GetApplicationAndDatastore workspaceId={workspaceIdIn} ></GetApplicationAndDatastore>
             }

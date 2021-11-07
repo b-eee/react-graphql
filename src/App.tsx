@@ -12,7 +12,7 @@ function App() {
   return (
     <div className="App">
       <div className="container">
-        <button onClick={() => setOption('workspaces')}>workspaces</button>
+        <button onClick={() => setOption('workspaces')}>Workspaces</button>
         <button onClick={() => setOption('applicationdatastores')}>Aplication and Datastore</button>
         <button onClick={() => setOption('items')}>Items</button>
         <button onClick={() => setOption('itemsdetail')}>Items Detail</button>

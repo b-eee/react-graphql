@@ -1,29 +1,12 @@
 import React from 'react';
+import { useQuery } from "@apollo/client";
+import { GET_DATASTOREITEMDETAIL } from '../service-graphql/item'
 import {
-  useQuery,
-  gql,
-  useMutation,
-} from "@apollo/client";
-
-import {DataQuery, PropsItemDetail} from '../models/datastore'
-
-const GET_APPLICATIONDATASTORE = gql`
-query Query($itemId: String!, $datastoreId: String!, $projectId: String, $datastoreItemDetailParams: DatastoreItemDetailParams) {
-    getDatastoreItemDetails(itemId: $itemId, datastoreId: $datastoreId, projectId: $projectId, datastoreItemDetailParams: $datastoreItemDetailParams) {
-      title
-      rev_no
-      field_values
-      status_list
-      status_actions
-      item_actions
-      status_order
-      status_action_order
-      item_action_order
-    }
-  }
-`;
-
-
+  DataQuery,
+  PropsItemDetail,
+  DatastoreItemDetails,
+  DatastoreItemDetailParams
+} from '../models/datastore'
 
 function GetItemDetail(props: PropsItemDetail) {
   const dataQuery: DataQuery = props.dataQuery
@@ -34,7 +17,14 @@ function GetItemDetail(props: PropsItemDetail) {
     datastoreItemDetailParams
   } = dataQuery
 
-  const  { data, loading, error } = useQuery(GET_APPLICATIONDATASTORE, 
+  const  { data, loading, error } = useQuery<{
+    getDatastoreItemDetails: DatastoreItemDetails
+  }, {
+    projectId: string,
+    datastoreId: string,
+    itemId: string,
+    datastoreItemDetailParams?:DatastoreItemDetailParams
+  }>(GET_DATASTOREITEMDETAIL, 
     {
       variables: {
         projectId,
@@ -44,10 +34,12 @@ function GetItemDetail(props: PropsItemDetail) {
       },
     });
   if (loading) return <tr><td> Loading...</td></tr>;
-  if (error) return <tr><td>Error :(</td></tr>;
+  if (error) return <tr><td>Error</td></tr>;
   return (
     <tr >
-      <td>{JSON.stringify(data.getDatastoreItemDetails)}</td>
+      {data &&
+        <td>{JSON.stringify(data.getDatastoreItemDetails)}</td>
+      }
     </tr>
   );
 }
@@ -85,20 +77,20 @@ function ItemDetail() {
     <>
         <div className="title-query">Query: Get Item Detail </div>
         <div className="body-input">
-          <div>project ID:</div>
+          <div>Project ID:</div>
           <div className="input-field"><input onChange={(e) => setProject(e.target.value)} placeholder="project ID..." /></div>
         </div>
         <div className="body-input">
-          <div>datastore ID:</div>
+          <div>Datastore ID:</div>
           <div className="input-field"><input onChange={(e) => setDatastore(e.target.value)} placeholder="datastore ID..." /></div>
         </div>
         <div className="body-input">
-          <div>item ID:</div>
+          <div>Item ID:</div>
           <div className="input-field"><input onChange={(e) => setItem(e.target.value)} placeholder="item ID..." /></div>
         </div>
-          <div>datastoreItemDetailParams:https://apidoc.hexabase.com/docs/v0/items-search/GetItemDetails</div>
+          <div>datastoreItemDetailParams: https://apidoc.hexabase.com/docs/v0/items-search/GetItemDetails</div>
         <div className="body-input">
-          <div>example type json: {JSON.stringify({"format":"map"})}</div>
+          <div>Example type json: {JSON.stringify({"format":"map"})}</div>
           <div className="input-field type-json"><input onChange={(e) => setDatastoreItemDetailParams(e.target.value)} placeholder="datastoreItemDetailParams..." /></div>
         </div>
         <button onClick={handleClick} className="icon">

@@ -1,45 +1,36 @@
 import React from 'react';
-import {
-  useQuery,
-  gql,
-  useMutation,
-} from "@apollo/client";
+import { useQuery } from "@apollo/client";
+import {GET_DATASTOREACTION} from '../service-graphql/datastore'
+import { PropDatastoreId, DatastoreGetActions } from '../models/datastore'
 
-
-const GET_DATASTORESTATUS = gql`
-query Query($datastoreId: String!) {
-  datastoreGetActions(datastoreId: $datastoreId) {
-    workspace_id
-    project_id
-    datastore_id
-    action_id
-    is_status_action
-    display_id
-    operation
-    set_status
-    name
-  }
-}
-`;
-
-
-function GetActions(props: any) {
+function GetActions(props: PropDatastoreId): any {
   const datastoreId = props.datastoreId
-  const  { data, loading, error } = useQuery(GET_DATASTORESTATUS, 
+  const  { data, loading, error } = useQuery<{
+    datastoreGetActions: [DatastoreGetActions]
+  }>(GET_DATASTOREACTION, 
     {
       variables: { datastoreId },
     });
   if (loading) return <tr><td> Loading...</td></tr>;
-  if (error) return <tr><td>Error :(</td></tr>;
-  return data.datastoreGetActions.map((appDs:any, index:number) => {
+  if (error) return <tr><td>Error</td></tr>;
+  const datastoreActions = data?.datastoreGetActions
+  if(datastoreActions){
+    return datastoreActions.map((datastoreAction:DatastoreGetActions, index:number) => {
       return (
         <tr key={index}>
           <td>{index}</td>
-          <td>{JSON.stringify(appDs)}</td>
+          <td>{JSON.stringify(datastoreAction)}</td>
         </tr>
       );
-  })
-
+    })
+  } else {
+    return (
+      <tr>
+        <td></td>
+        <td>Can't load data</td>
+      </tr>
+    )
+  }
 }
 
 function DatastoreActions() {
@@ -54,16 +45,14 @@ function DatastoreActions() {
     <>
         <div className="title-query">Query: Get Datastores Actions</div>
         <input onChange={(e) => setDatastoreId(e.target.value)} placeholder="Datastore Id..." />
-        <button onClick={handleClick} className="icon">
-        Datastore Id
-        </button>
+        <button onClick={handleClick} className="icon">Datastore Id</button>
         <table className="table-content">
           <tr>
             </tr>
             <thead>
               <tr>
-                  <th>index</th>
-                  <th scope="col">Datastore Actions</th>
+                <th>Index</th>
+                <th scope="col">Datastore Actions</th>
               </tr>
           </thead>
           <tbody>
